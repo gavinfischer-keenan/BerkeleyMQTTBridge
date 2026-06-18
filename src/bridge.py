@@ -48,6 +48,8 @@ MQTT_CLIENT_ID   = os.getenv("MQTT_CLIENT_ID",     "berkeley-mqtt-bridge")
 HOUSE_INGEST_URL = os.getenv("HOUSE_INGEST_URL",   "http://localhost:5050/api/ingest")
 INGEST_TIMEOUT   = float(os.getenv("INGEST_TIMEOUT_SEC", "3.0"))
 LOG_LEVEL        = os.getenv("LOG_LEVEL",           "INFO")
+HOUSE_LAT        = float(os.getenv("HOUSE_LAT", "0.0"))
+HOUSE_LNG        = float(os.getenv("HOUSE_LNG", "0.0"))
 
 # ── Topic → ingest service mapping ────────────────────────────────────────────
 #
@@ -67,8 +69,8 @@ def _xform_earthquake(topic: str, payload: dict) -> dict:
         "mag":    payload.get("estimated_magnitude", 0.0),
         "place":  f"Local sensor — {payload.get('station', 'BK.BKMO')}",
         "time":   int(time.time() * 1000),
-        "lat":    37.8724,   # Mosswood property — fixed for local sensor
-        "lng":    -122.2595,
+        "lat":    HOUSE_LAT,
+        "lng":    HOUSE_LNG,
         "depth":  0.0,
         "_local": True,      # flag so the frontend can style it differently
         "_bridge": {
